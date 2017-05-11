@@ -2,22 +2,13 @@
 
 A radar chart can be reuse by different dataset and other use controling factors.
 
-------
-
 ## Files
 
 - **`radar.js`** : a JavaScript file contains the function for rendering reuseable radar chart.
 - **`main.css`** : stylesheet containing more style for components.
 
-------
-
-## Description
-
-
-
-------
-
 ## Functionality
+
 - **`components`** : Create main radar chart components includes `allAxis`, `totalAxes`, `radius` of chart, `verticesTooltip`, numbers of `level` of chart, `axes`, `vertices`, `legend`
 
 - **`coordinates`** : build [x, y] corrdinates of polygon vertices in the svg area, it can be adjusted based on the user input value of width and height
@@ -50,7 +41,7 @@ A radar chart can be reuse by different dataset and other use controling factors
 
 - **`legendBoxSize`** : user can adjust the size of the legend box based on their own need
 
-- **`color`** : user can adjust the color which will apply to vertices, polygons and legends' color. `It will not change the color of level, axes, level labels and axes labels`.
+- **`color`** : user can adjust the color which will apply to `vertices`, `polygons` and `legends`' color. `It will not change the color of level, axes, level labels and axes labels`.
 
 ## Instruction
 
