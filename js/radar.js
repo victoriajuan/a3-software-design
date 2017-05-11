@@ -275,7 +275,6 @@ var RadarChart = function () {
                 d3.select(this).selectAll("svg").remove();
 
             })
-
         };
 
         chart.level = function(value) {
