@@ -112,7 +112,7 @@ var RadarChart = function () {
 
                     level.data(allAxis).enter()
                         .append("line")
-                        .attr("class", "level-lines")
+                        .attr("class", "levelLines")
                         .attr("x1", function(d, i) { 
                             return levelFactor * (1 - Math.sin(i * radians / totalAxes)); 
                         })
@@ -136,7 +136,7 @@ var RadarChart = function () {
 
                     level.data([1]).enter()
                         .append("text")
-                        .attr("class", "level-labels")
+                        .attr("class", "levelLabels")
                         .text((maxValue * (eachLevel + 1) / level).toFixed(2))
                         .attr("x", function(d) { 
                             return levelFactor * (1 - Math.sin(0)); 
@@ -152,7 +152,7 @@ var RadarChart = function () {
                 /****************************************  axes  ************************************************/
                 axes.data(allAxis).enter()
                     .append("line")
-                    .attr("class", "axis-lines")
+                    .attr("class", "axiLines")
                     .attr("x1", width / 2)
                     .attr("y1", height / 2)
                     .attr("x2", function(d, i) { 
@@ -166,7 +166,7 @@ var RadarChart = function () {
                 /****************************************  axes label  ************************************************/
                 axes.data(allAxis).enter()
                     .append("text")
-                    .attr("class", "axis-labels")
+                    .attr("class", "axisLabels")
                     .text(function(d) { 
                         return d; 
                     })
@@ -179,7 +179,7 @@ var RadarChart = function () {
                 legend.selectAll(".legend-tiles")
                         .data(data).enter()
                         .append("rect")
-                        .attr("class", "legend-tiles")
+                        .attr("class", "legendTiles")
                         .attr("x", width - paddingX / 2)
                         .attr("y", function(d, i) { 
                             return i * 2 * legendBoxSize; 
@@ -193,7 +193,7 @@ var RadarChart = function () {
                 legend.selectAll(".legend-labels")
                         .data(data).enter()
                         .append("text")
-                        .attr("class", "legend-labels")
+                        .attr("class", "legendLabels")
                         .attr("x", width - paddingX / 2 + (1.5 * legendBoxSize))
                         .attr("y", function(d, i) { 
                             return i * 2 * legendBoxSize; 
@@ -209,7 +209,7 @@ var RadarChart = function () {
                 data.forEach(function(group, g) {
                     vertices.data(group.axes).enter()
                     .append("circle")
-                    .attr("class", "polygon-vertice")
+                    .attr("class", "polygonVertice")
                     .attr("r", polygonPointSize)
                     .attr("cx", function(d, i) { return d.coordinates.x; })
                     .attr("cy", function(d, i) { return d.coordinates.y; })
@@ -221,7 +221,7 @@ var RadarChart = function () {
                 /****************************************  polygons  ************************************************/
                 vertices.data(data).enter()
                 .append("polygon")
-                .attr("class", "polygon-areas")
+                .attr("class", "polygonAreas")
                 .attr("points", function(group) { 
                     var verticesString = "";
                     group.axes.forEach(function(d) { 
