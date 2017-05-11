@@ -31,8 +31,7 @@ var RadarChart = function () {
         vertices = null,
         legend = null,
         over = "ontouchstart" in window ? "touchstart" : "mouseover";
-        out = "ontouchstart" in window ? "touchend" : "mouseout";;
-
+        out = "ontouchstart" in window ? "touchend" : "mouseout";
 
     var chart = function(section){
         var drawWidth = width - margin.left - margin.right;
@@ -64,7 +63,7 @@ var RadarChart = function () {
             paddingY = width * levelScale;
             
 
-            /****************************************  build components  ************************************************/
+            /****************************************  components  ************************************************/
             allAxis = data[0].axes.map(function(i, j){
                 return i.axis;
             });
@@ -74,25 +73,29 @@ var RadarChart = function () {
             radius = Math.min(width/2, height/2);
 
             verticesTooltip = d3.select("body")
-                                .append("div").classed("verticesTooltip", true)
+                                .append("div")
+                                .attr("class", "verticesTooltip")
                                 .attr("opacity", 0);
 
             level = gEnter.selectAll(" .level")
-                            .append("g").classed("level", true);
+                            .append("g")
+                            .attr("class", level);
 
             axes = gEnter.selectAll(" .axes")
-                        .append("g").classed("axes", true);
+                        .append("g")
+                        .attr("class", "axes");
 
             vertices = gEnter.selectAll(" .vertices");
 
-            legend = gEnter.append("g").classed("legend", true)
+            legend = gEnter.append("g")
+                            .attr("class", "legend")
                             .attr("height", height/2)
                             .attr("width", width/2)
                             .attr("transform", "translate(" + 0 + "," + 1.1*height + ")")
 
-            /****************************************  build coordinates  ************************************************/
-            data.forEach(function(group) {
-                group.axes.forEach(function(d, i) {
+            /****************************************  coordinates  ************************************************/
+            data.forEach(function(d) {
+                d.axes.forEach(function(d, i) {
                     d.coordinates = { 
                         x: width / 2 * (1 - (parseFloat(Math.max(d.value, 0)) / maxValue) * Math.sin(i * radians / totalAxes)),
                         y: height / 2 * (1 - (parseFloat(Math.max(d.value, 0)) / maxValue) * Math.cos(i * radians / totalAxes))
@@ -100,62 +103,80 @@ var RadarChart = function () {
                 });
             });
 
-            /****************************************  build level  ************************************************/
+            /****************************************  level  ************************************************/
             for(var eachLevel=0; eachLevel<level; eachLevel++) {
                 var levelFactor = radius * ((eachLevel + 1) / level);
 
                 level.data(allAxis).enter()
                     .append("line")
                     .attr("class", "level-lines")
-                    .attr("x1", function(d, i) { return levelFactor * (1 - Math.sin(i * radians / totalAxes)); })
-                    .attr("y1", function(d, i) { return levelFactor * (1 - Math.cos(i * radians / totalAxes)); })
-                    .attr("x2", function(d, i) { return levelFactor * (1 - Math.sin((i + 1) * radians / totalAxes)); })
-                    .attr("y2", function(d, i) { return levelFactor * (1 - Math.cos((i + 1) * radians / totalAxes)); })
+                    .attr("x1", function(d, i) { 
+                        return levelFactor * (1 - Math.sin(i * radians / totalAxes)); 
+                    })
+                    .attr("y1", function(d, i) { 
+                        return levelFactor * (1 - Math.cos(i * radians / totalAxes)); 
+                    })
+                    .attr("x2", function(d, i) { 
+                        return levelFactor * (1 - Math.sin((i + 1) * radians / totalAxes)); 
+                    })
+                    .attr("y2", function(d, i) { 
+                        return levelFactor * (1 - Math.cos((i + 1) * radians / totalAxes)); 
+                    })
                     .attr("transform", "translate(" + (width / 2 - levelFactor) + ", " + (height / 2 - levelFactor) + ")")
                     .attr("stroke", "gray")
                     .attr("stroke-width", "0.5px");
             }
 
-            /****************************************  build level label  ************************************************/
+            /****************************************  level label  ************************************************/
             for (var eachLevel = 0; eachLevel < level; eachLevel++) {
                 var levelFactor = radius * ((eachLevel + 1) / level);
 
                 level.data([1]).enter()
-                .append("text")
-                .attr("class", "level-labels")
-                .text((maxValue * (eachLevel + 1) / level).toFixed(2))
-                .attr("x", function(d) { return levelFactor * (1 - Math.sin(0)); })
-                .attr("y", function(d) { return levelFactor * (1 - Math.cos(0)); })
-                .attr("transform", "translate(" + (width / 2 - levelFactor + 5) + ", " + (height / 2 - levelFactor) + ")")
-                .attr("fill", "gray")
-                .attr("font-family", "sans-serif")
-                .attr("font-size", 10 * labelScale + "px");
+                    .append("text")
+                    .attr("class", "level-labels")
+                    .text((maxValue * (eachLevel + 1) / level).toFixed(2))
+                    .attr("x", function(d) { 
+                        return levelFactor * (1 - Math.sin(0)); 
+                    })
+                    .attr("y", function(d) { 
+                        return levelFactor * (1 - Math.cos(0)); 
+                    })
+                    .attr("transform", "translate(" + (width / 2 - levelFactor + 5) + ", " + (height / 2 - levelFactor) + ")")
+                    .attr("fill", "gray")
+                    .attr("font-size", 10 * labelScale + "px");
             }
 
-            /****************************************  build axes  ************************************************/
+            /****************************************  axes  ************************************************/
             axes.data(allAxis).enter()
-                .append("line").classed("axis-lines", true)
+                .append("line")
+                .attr("class", "axis-lines")
                 .attr("x1", width / 2)
                 .attr("y1", height / 2)
-                .attr("x2", function(d, i) { return width / 2 * (1 - Math.sin(i * radians / totalAxes)); })
-                .attr("y2", function(d, i) { return height / 2 * (1 - Math.cos(i * radians / totalAxes)); })
-                .attr("stroke", "grey")
-                .attr("stroke-width", "1px");
+                .attr("x2", function(d, i) { 
+                    return width / 2 * (1 - Math.sin(i * radians / totalAxes)); 
+                })
+                .attr("y2", function(d, i) { 
+                    return height / 2 * (1 - Math.cos(i * radians / totalAxes)); 
+                })
+                .attr("stroke", "grey");
 
-            /****************************************  build axes label  ************************************************/
+            /****************************************  axes label  ************************************************/
             axes.data(allAxis).enter()
-                .append("text").classed("axis-labels", true)
-                .text(function(d) { return d; })
+                .append("text")
+                .attr("class", "axis-labels")
+                .text(function(d) { 
+                    return d; 
+                })
                 .attr("text-anchor", "middle")
                 .attr("x", function(d, i) { return width / 2 * (1 - 1.3 * Math.sin(i * radians / totalAxes)); })
                 .attr("y", function(d, i) { return height / 2 * (1 - 1.1 * Math.cos(i * radians / totalAxes)); })
-                .attr("font-family", "sans-serif")
                 .attr("font-size", 11 * labelScale + "px");
 
-            /****************************************  build legend  ************************************************/
+            /****************************************  legend  ************************************************/
             legend.selectAll(".legend-tiles")
                     .data(data).enter()
-                    .append("rect").classed("legend-tiles", true)
+                    .append("rect")
+                    .attr("class", "legend-tiles")
                     .attr("x", width - paddingX / 2)
                     .attr("y", function(d, i) { 
                         return i * 2 * legendBoxSize; 
@@ -168,7 +189,8 @@ var RadarChart = function () {
 
             legend.selectAll(".legend-labels")
                     .data(data).enter()
-                    .append("text").classed("legend-labels", true)
+                    .append("text")
+                    .attr("class", "legend-labels")
                     .attr("x", width - paddingX / 2 + (1.5 * legendBoxSize))
                     .attr("y", function(d, i) { 
                         return i * 2 * legendBoxSize; 
@@ -180,10 +202,11 @@ var RadarChart = function () {
                         return d.group;
                     });
 
-            /****************************************  build vertices  ************************************************/
+            /****************************************  vertices  ************************************************/
             data.forEach(function(group, g) {
                 vertices.data(group.axes).enter()
-                .append("circle").classed("polygon-vertices", true)
+                .append("circle")
+                .attr("class", "polygon-vertice")
                 .attr("r", polygonPointSize)
                 .attr("cx", function(d, i) { return d.coordinates.x; })
                 .attr("cy", function(d, i) { return d.coordinates.y; })
@@ -192,10 +215,11 @@ var RadarChart = function () {
                 .on(out, verticesTooltipHide);
             });
 
-            /****************************************  build polygons  ************************************************/
+            /****************************************  polygons  ************************************************/
             vertices.data(data).enter()
-            .append("polygon").classed("polygon-areas", true)
-            .attr("points", function(group) { // build verticesString for each group
+            .append("polygon")
+            .attr("class", "polygon-areas")
+            .attr("points", function(group) { 
                 var verticesString = "";
                 group.axes.forEach(function(d) { 
                     verticesString += d.coordinates.x + "," + d.coordinates.y + " "; 
@@ -203,38 +227,49 @@ var RadarChart = function () {
                 return verticesString;
             })
             .attr("stroke-width", "2px")
-            .attr("stroke", function(d, i) { return color(i); })
-            .attr("fill", function(d, i) { return color(i); })
+            .attr("stroke", function(d, i) { 
+                return color(i); 
+            })
+            .attr("fill", function(d, i) { 
+                return color(i); 
+            })
             .attr("fill-opacity", polygonAreaOpacity)
             .attr("stroke-opacity", polygonStrokeOpacity)
             .on(over, function(d) {
-            gEnter.selectAll(".polygon-areas") // fade all other polygons out
-                    .transition(250)
+            gEnter.selectAll(".polygon-areas") 
+                    .transition()
+                    .duration(1000)
                     .attr("fill-opacity", 0.1)
                     .attr("stroke-opacity", 0.1);
-            d3.select(this) // focus on active polygon
-            .transition(250)
+            d3.select(this) 
+            .transition()
+            .duration(1000)
             .attr("fill-opacity", 0.7)
             .attr("stroke-opacity", polygonStrokeOpacity);
             })
             .on(out, function() {
-            d3.selectAll(".polygon-areas")
-                .transition(250)
-                .attr("fill-opacity", polygonAreaOpacity)
-                .attr("stroke-opacity", 1);
+                d3.selectAll(".polygon-areas")
+                    .transition()
+                    .duration(1000)
+                    .attr("fill-opacity", polygonAreaOpacity)
+                    .attr("stroke-opacity", 1);
             });
 
             /****************************************  show tooltip  ************************************************/
-            verticesTooltip.style("opacity", 0.9)
-            .html("<strong>Value</strong>: " + d.value + "<br />" +
-            "<strong>Description</strong>: " + d.description + "<br />")
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY) + "px");
+            function verticesTooltipShow(d) {
+                verticesTooltip.style("opacity", 0.9)
+                .html("<strong>Value</strong>: " + d.value + "<br />" +
+                "<strong>Description</strong>: " + d.description + "<br />")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY) + "px");
+            }
 
             /****************************************  hide tooltip  ************************************************/
-            verticesTooltip.style("opacity", 0);
+            function verticesTooltipHide() {
+                verticesTooltip.style("opacity", 0);
+            }
 
-            gEnter.exit().remove();
+            d3.select(this).selectAll("svg").remove();
 
         })
 
