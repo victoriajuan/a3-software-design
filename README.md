@@ -7,7 +7,7 @@ A radar chart can be reuse by different dataset and other use controling factors
 - **`radar.js`** : a JavaScript file contains the function for rendering reuseable radar chart.
 - **`main.css`** : stylesheet containing more style for components.
 
-## Functionality
+## Functionalities
 
 - **`components`** : Create main radar chart components includes `allAxis`, `totalAxes`, `radius` of chart, `verticesTooltip`, numbers of `level` of chart, `axes`, `vertices`, `legend`
 
