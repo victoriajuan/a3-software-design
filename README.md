@@ -83,23 +83,47 @@ Thor, Fighting Skills, 4, quite low for a god???
 ```js
 var data = [
   {
-    className: 'germany', // optional
+    className: 'Captain America', // optional
     axes: [
-      {axis: "strength", value: 13, yOffset: 10},
-      {axis: "intelligence", value: 6},
-      {axis: "charisma", value: 5},  
-      {axis: "dexterity", value: 9},  
-      {axis: "luck", value: 2, xOffset: -20}
+      {axis: "Intelligence", value: 33, description: "only human"},
+      {axis: "Strength", value: 3, description: "only human"},
+      {axis: "Speed", value: 2, description: "only human"},  
+      {axis: "Durability", value: 3, description: "only human"},  
+      {axis: "Energy", value: 1, description: "only human"},
+      {axis: "Fighting Skills", value: 1, description: "able to judge combat decisively"}
     ]
   },
   {
-    className: 'argentina',
+    className: 'Iron Man',
     axes: [
-      {axis: "strength", value: 6},
-      {axis: "intelligence", value: 7},
-      {axis: "charisma", value: 10},  
-      {axis: "dexterity", value: 13},  
-      {axis: "luck", value: 9}
+      {axis: "Intelligence", value: 6, description: "Smart entreprenuer"},
+      {axis: "Strength", value: 6, description: "Powered by his suit"},
+      {axis: "Speed", value: 5. description: "rocket boosters"},  
+      {axis: "Durability", value: 6, description: "tough durable material"},  
+      {axis: "Energy", value: 6, description: },
+      {axis: "Fighting Skills", value: 4, description: }
+    ]
+  },
+  {
+    className: 'Hulk',
+    axes: [
+      {axis: "Intelligence", value: 6, description: "Scientist brilliance"},
+      {axis: "Strength", value: 7, description: "Insanely strong"},
+      {axis: "Speed", value: 3. description: "clumsy"},  
+      {axis: "Durability", value: 7, description: "Close to industructible"},  
+      {axis: "Energy", value: 1, description: },
+      {axis: "Fighting Skills", value: 4, description: "great at SMASHING"}
+    ]
+  },
+  {
+    className: 'Thor',
+    axes: [
+      {axis: "Intelligence", value: 2, description: "not too bright"},
+      {axis: "Strength", value: 7, description: "god-like strength"},
+      {axis: "Speed", value: 7. description: "god-like speed"},  
+      {axis: "Durability", value: 6, description: "god-like durability"},  
+      {axis: "Energy", value: 6, description: },
+      {axis: "Fighting Skills", value: 4, description: "quite low for a god???"}
     ]
   }
 ];
