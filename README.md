@@ -77,10 +77,37 @@ Thor, Energy, 6,
 Thor, Fighting Skills, 4, quite low for a god???
 
 ```
+
+**`data structure`**
+
+```js
+var data = [
+  {
+    className: 'germany', // optional
+    axes: [
+      {axis: "strength", value: 13, yOffset: 10},
+      {axis: "intelligence", value: 6},
+      {axis: "charisma", value: 5},  
+      {axis: "dexterity", value: 9},  
+      {axis: "luck", value: 2, xOffset: -20}
+    ]
+  },
+  {
+    className: 'argentina',
+    axes: [
+      {axis: "strength", value: 6},
+      {axis: "intelligence", value: 7},
+      {axis: "charisma", value: 10},  
+      {axis: "dexterity", value: 13},  
+      {axis: "luck", value: 9}
+    ]
+  }
+];
+```
 - Once you have your dataset, you should be able to render the chart on different data using this approach:
 
 ```js
-var myChart = chart().param1(value1).param2(value2);
+var myChart = radar().param1(value1).param2(value2);
 
 var chartWrapper = d3.select('#my-div')
                 .datum([dataSet]) 

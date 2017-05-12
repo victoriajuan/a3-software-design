@@ -1,9 +1,4 @@
-import * as d3 from 'd3';
-import d3tip from 'd3-tip';
-
-
-var RadarChart = function () {
-    d3.csv(this, function(data) {
+var radar = function () {
         
         var width = 800,
             height = 600,
@@ -19,7 +14,7 @@ var RadarChart = function () {
             polygonStrokeOpacity = 1,
             polygonPointSize = 4,
             legendBoxSize = 10,
-            color = d3.scale.category10(),
+            color = d3.scaleOrdinal().range(d3.schemeCategory10),
             margin = {
                 top: 10,
                 right: 10,
@@ -41,6 +36,7 @@ var RadarChart = function () {
             var drawHeight = height - margin.top - margin.bottom;
 
             section.each(function(data){
+                console.log(data);
                 var ele = d3.select(this);
                 var svg = ele.selectAll("svg").data([data]);
 
@@ -48,28 +44,35 @@ var RadarChart = function () {
                                 .append("svg")
                                 .attr("width", width)
                                 .attr("height", height)
-                                .append("g");
+                                .attr("transform", "translate(" + 80 + "," + 60 + ")");
 
                 gEnter.append("g")
-                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
                         .attr('height', drawHeight)
                         .attr('width', drawWidth)
                         .attr("class", "chartG");
 
-                maxValue = Math.max(maxValue, d3.max(data, function(d) {
-                    return d3.max(d.axes, function(o) { return o.value; });
+                data = data.map(function(datum) {
+                    if(datum instanceof Array) {
+                        datum = {axes: datum};
+                    }
+                    return datum;
+                });
+
+                 maxValue = Math.max(maxValue, d3.max(function(d) {
+                    return d3.max(d.axes, function(o) { 
+                        return o.value; 
+                    });
                 }));
 
                 width = width * levelScale;
                 height = height * levelScale;
                 paddingX = width * levelScale;
                 paddingY = width * levelScale;
-                
 
                 /****************************************  components  ************************************************/
-                allAxis = data[0].axes.map(function(i, j){
+                allAxis = (data[0].axes.map(function(i, j){
                     return i.axis;
-                });
+                }));
 
                 totalAxes = allAxis.length;
 
@@ -78,7 +81,6 @@ var RadarChart = function () {
                 verticesTooltip = d3.select("body")
                                     .append("div")
                                     .attr("class", "verticesTooltip")
-                                    .attr("opacity", 0);
 
                 level = gEnter.selectAll(" .level")
                                 .append("g")
@@ -86,7 +88,8 @@ var RadarChart = function () {
 
                 axes = gEnter.selectAll(" .axes")
                             .append("g")
-                            .attr("class", "axes");
+                            .attr("class", "axes")
+                            .attr("transform", "translate(" + 50 + "," + 50 + ")");
 
                 vertices = gEnter.selectAll(" .vertices");
 
@@ -105,7 +108,7 @@ var RadarChart = function () {
                         };
                     });
                 });
-
+                console.log(data.coordinates);
                 /****************************************  level  ************************************************/
                 for(var eachLevel=0; eachLevel<level; eachLevel++) {
                     var levelFactor = radius * ((eachLevel + 1) / level);
@@ -152,7 +155,7 @@ var RadarChart = function () {
                 /****************************************  axes  ************************************************/
                 axes.data(allAxis).enter()
                     .append("line")
-                    .attr("class", "axiLines")
+                    .attr("class", "axisLines")
                     .attr("x1", width / 2)
                     .attr("y1", height / 2)
                     .attr("x2", function(d, i) { 
@@ -171,12 +174,12 @@ var RadarChart = function () {
                         return d; 
                     })
                     .attr("text-anchor", "middle")
-                    .attr("x", function(d, i) { return width / 2 * (1 - 1.3 * Math.sin(i * radians / totalAxes)); })
+                    .attr("x", function(d, i) { return width / 2 * (1 - 1.1 * Math.sin(i * radians / totalAxes)); })
                     .attr("y", function(d, i) { return height / 2 * (1 - 1.1 * Math.cos(i * radians / totalAxes)); })
                     .attr("font-size", 11 * labelScale + "px");
 
                 /****************************************  legend  ************************************************/
-                legend.selectAll(".legend-tiles")
+                legend.selectAll(".legendTiles")
                         .data(data).enter()
                         .append("rect")
                         .attr("class", "legendTiles")
@@ -190,7 +193,7 @@ var RadarChart = function () {
                             return color(g); 
                         });
 
-                legend.selectAll(".legend-labels")
+                legend.selectAll(".legendLabels")
                         .data(data).enter()
                         .append("text")
                         .attr("class", "legendLabels")
@@ -211,8 +214,8 @@ var RadarChart = function () {
                     .append("circle")
                     .attr("class", "polygonVertice")
                     .attr("r", polygonPointSize)
-                    .attr("cx", function(d, i) { return d.coordinates.x; })
-                    .attr("cy", function(d, i) { return d.coordinates.y; })
+                    .attr("x", function(d, i) { return d.coordinates.x; })
+                    .attr("y", function(d, i) { return d.coordinates.y; })
                     .attr("fill", color(g))
                     .on(over, verticesTooltipShow)
                     .on(out, verticesTooltipHide);
@@ -239,7 +242,7 @@ var RadarChart = function () {
                 .attr("fill-opacity", polygonAreaOpacity)
                 .attr("stroke-opacity", polygonStrokeOpacity)
                 .on(over, function(d) {
-                gEnter.selectAll(".polygon-areas") 
+                gEnter.selectAll(".polygonAreas") 
                         .transition()
                         .duration(1000)
                         .attr("fill-opacity", 0.1)
@@ -251,7 +254,7 @@ var RadarChart = function () {
                 .attr("stroke-opacity", polygonStrokeOpacity);
                 })
                 .on(out, function() {
-                    d3.selectAll(".polygon-areas")
+                    d3.selectAll(".polygonAreas")
                         .transition()
                         .duration(1000)
                         .attr("fill-opacity", polygonAreaOpacity)
@@ -272,7 +275,7 @@ var RadarChart = function () {
                     verticesTooltip.style("opacity", 0);
                 }
 
-                d3.select(this).selectAll("svg").remove();
+                // d3.select(this).selectAll("svg").remove();
 
             })
         };
@@ -280,25 +283,25 @@ var RadarChart = function () {
         chart.level = function(value) {
             if (!arguments.length) return level;
             level = value;
-            return my;
+            return chart;
         };
 
         chart.width = function(value) {
             if (!arguments.length) return width;
             width = value;
-            return my;
+            return chart;
         };
 
         chart.height = function(value) {
             if (!arguments.length) return height;
             height = value;
-            return my;
+            return chart;
         };
 
         chart.labelScale = function(value) {
             if (!arguments.length) return labelScale;
             labelScale = value;
-            return my;
+            return chart;
         };
 
         chart.legendBoxSize = function(value) {
@@ -314,8 +317,4 @@ var RadarChart = function () {
         };
         return chart
 
-    });
-
 };
-
-export default RadarChart;
